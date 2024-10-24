@@ -1,0 +1,103 @@
+<html>
+  <head>
+    <title>Search</title>
+    <style>
+      body {
+  background: #252525;
+}
+
+.filter-list {
+  margin: 35px auto 0 auto;
+  width: 300px;
+  background: #138796;
+  border-radius: 5px;
+  border: 1px solid darken(#138796, 20%);
+  input {
+    box-sizing: border-box;
+    width: 100%;
+    display: block;
+    padding: 10px;
+    border-radius: 5px 5px 0 0;
+    border: none;
+    font-size: 24px;
+    &focus {
+      outline: none;
+    }
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+      list-style-type: none;
+      margin: 0;
+      color: white;
+      font-weight: lighter;
+      padding: 10px 20px;
+      border-top: 1px solid darken(#138796, 20%);
+      &:hover {
+        background: #20636B;
+      }
+    }
+  }
+}
+    </style>
+  </head>
+  <body>
+    <div id="searchable-list">
+    </div>
+  </body>
+  <script>
+    var FilteredList = React.createClass({
+  filterList: function(event) {
+    var updatedList = this.state.initialItems;
+    updatedList = updatedList.filter(function(item) {
+      return item.toLowerCase().search(
+        event.target.value.toLowerCase()) !== -1;
+    });
+    this.setState({
+      items: updatedList
+    });
+  },
+  getInitialState: function() {
+    return {
+      initialItems: [
+        "Filter",
+        "The",
+        "Items",
+        "In",
+        "This",
+        "List"
+      ],
+      items: []
+    }
+  },
+  componentWillMount: function() {
+    this.setState({items: this.state.initialItems});
+  },
+  render: function() {
+    return (
+      <div className="filter-list">
+        <input type="text" placeholder="Search" onChange={this.filterList} />
+        <List items={this.state.items} />
+      </div>
+    );
+  }
+});
+
+var List = React.createClass({
+  render: function() {
+    return (
+      <ul>
+        {
+          this.props.items.map(function(item) {
+            return <li key={item}>{item}</li>
+          })
+        }
+      </ul>
+    );
+  }
+});
+
+ReactDOM.render(<FilteredList />, document.getElementById('searchable-list'));
+  </script>
+</html>
